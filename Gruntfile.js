@@ -26,7 +26,7 @@ module.exports = function(grunt) {
 				files: ['app/scripts/app.js'],
 				tasks: ['concat']
 			},
-			files: ['app/*.html'],
+			files: ['app/*.html', 'app/styles/zymology-redux.css'],
 			options: {
 				livereload: true
 			}
