@@ -11,7 +11,27 @@
 </head>
 <body>
 	<div class="container">
-		<h1>Hello World!!!</h1>		
+		<h1>Zymology Redux</h1>
+	</div>
+	<div class="container" ng-controller="recipeCtrl">
+		<h2>{{ recipe.name }}</h2>
+		<p>Brewed by: {{ recipe.brewer }}</p>
+		<h3>Fermentables</h3>
+		<table class="table">
+			<tr>
+				<th>Qty</th>
+				<th>Name</th>
+				<th>Manufacturer</th>
+			</tr>
+			<tr ng-repeat="fermentable in recipe.fermentables | orderBy:'-quantity'">
+				<td>{{ fermentable.quantity }}</td>
+				<td>{{ fermentable.name }}</td>
+				<td>{{ fermentable.manufacturer }}</td>
+			</tr>
+			<tr>
+				<td colspan="3">Total Fermentables: {{ totalFermentables() }} pounds</td>
+			</tr>
+		</table>
 	</div>
 
 	<script src="//localhost:35729/livereload.js"></script>
