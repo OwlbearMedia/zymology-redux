@@ -25,22 +25,27 @@
 				<div class="col-md-12">
 					<div class="stats">
 						<div class="row">
-							<div class="col-xs-4">
+							<div class="col-sm-4">
 								<h3>Vital Statistics</h3>
 								<p>Brewed by: {{ recipe.brewer }}</p>
 								<p>Batch Size: {{ recipe.size }} gallons</p>
 							</div>
-							<div class="col-md-4">
-								<p>Total Fermentables: {{ totalFermentables() }} pounds</p>
-								<div class="row">
-									<div class="col-xs-4">Efficiency: <input type="tel" class="form-control" value="{{ recipe.efficiency }}" ng-model="recipe.efficiency"></div>
-									<div class="col-xs-4">
-										<p>OG: {{ og().toFixed(3) }}<p>
-										<p>FG: {{ fg().toFixed(3) }}</p>
+							<div class="col-sm-4">
+								<div class="sub-group">
+									<p>Total Fermentables: {{ totalFermentables() }} pounds</p>
+									<div class="row">
+										<div class="col-xs-4">Efficiency: <input type="tel" class="form-control" value="{{ recipe.efficiency }}" ng-model="recipe.efficiency"></div>
+										<div class="col-xs-4">
+											<p>OG: {{ og().toFixed(3) }}<p>
+											<p>FG: {{ fg().toFixed(3) }}</p>
+										</div>
 									</div>
 								</div>
 							</div>
-							<div class="col-md-4">Total Hops: {{ totalHops() }} ounces</div>
+							<div class="col-sm-4">
+								<div class="sub-group">
+									Total Hops: {{ totalHops() }} ounces</div>		
+								</div>
 						</div>
 					</div>
 				</div>

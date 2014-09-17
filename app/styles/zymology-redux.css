@@ -18,3 +18,8 @@ button.delete {
 .stats h3 {
 	margin-top: 0;
 }
+.stats .sub-group {
+	border: 1px solid #e1e1e8;
+	padding: 9px 14px;
+	border-radius: 4px;
+}
