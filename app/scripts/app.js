@@ -73,7 +73,7 @@ zymology.controller('recipeCtrl', function($scope) {
 		var ppg = 0;
 
 		angular.forEach($scope.recipe.fermentables, function(fermentable) {
-			ppg = ppg + (fermentable.ppg * parseFloat(fermentable.quantity) / $scope.recipe.size);
+			ppg = ppg + (fermentable.ppg * parseFloat(fermentable.quantity) / $scope.recipe.batch_size);
 		});
 		return ppg;
 	};
