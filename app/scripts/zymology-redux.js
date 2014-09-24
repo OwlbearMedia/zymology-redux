@@ -238,7 +238,8 @@ d,e){var k=d.parent(),n=k.data("$selectController")||k.parent().data("$selectCon
 var model = {
 	name: 'Dylan\'s Pale Ale',
 	brewer: 'Dylan Whitney',
-	size: 5,
+	batch_size: 5,
+	boil_time: 60,
 	efficiency: 0.75,
 	attenuation: 0.75,
 	fermentables: [
