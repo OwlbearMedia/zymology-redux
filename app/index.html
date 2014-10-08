@@ -45,8 +45,10 @@
 							</div>
 							<div class="col-sm-4">
 								<div class="sub-group">
-									Total Hops: {{ totalHops() }} ounces</div>		
+									<p>Total Hops: {{ totalHops() }} ounces</p>
+									<p>IBU: {{ totalIBU().toFixed(1) }}</p>
 								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -64,8 +66,8 @@
 						<th colspan="2">Manufacturer</th>
 					</tr>
 					<tr ng-repeat="fermentable in recipe.fermentables | orderBy:'-quantity'">
-						<td class="qty">{{ (fermentable.quantity / totalFermentables() * 100).toFixed(2) }}</td>
-						<td class="qty"><input type="tel" class="form-control" ng-model="fermentable.quantity"></td>
+						<td class="qty">{{ fermentablePercent(fermentable) }}</td>
+						<td class="qty"><input type="tel" class="form-control" ng-model="fermentable.quantity" ng-model-options="{ updateOn: 'blur' }"></td>
 						<td>{{ fermentable.name }}</td>
 						<td>{{ fermentable.manufacturer }}</td>
 						<td><button type="button" class="btn btn-default delete" ng-click="delete('fermentables', $index)"><span class="glyphicon glyphicon-trash"></span></button></td>
@@ -79,14 +81,16 @@
 			<div class="table-responsive">
 				<table class="table">
 					<tr>
+						<th class="qty">IBU</th>
 						<th class="qty">Time</th>
 						<th class="qty">Qty</th>
 						<th>Name</th>
 						<th colspan="2">Origin</th>
 					</tr>
 					<tr ng-repeat="hop in recipe.hops | orderBy:'-time'">
-						<td class="qty"><input type="tel" class="form-control" value="{{ hop.time }}" ng-model="hop.time"></td>
-						<td class="qty"><input type="tel" class="form-control" value="{{ hop.quantity }}" ng-model="hop.quantity"></td>
+						<td class="qty">{{ ibu(hop).toFixed(2) }}</td>
+						<td class="qty"><input type="tel" class="form-control" value="{{ hop.time }}" ng-model="hop.time" ng-model-options="{ updateOn: 'blur' }"></td>
+						<td class="qty"><input type="tel" class="form-control" value="{{ hop.quantity }}" ng-model="hop.quantity" ng-model-options="{ updateOn: 'blur' }"></td>
 						<td>{{ hop.name }}</td>
 						<td>{{ hop.origin }}</td>
 						<td><button type="button" class="btn btn-default delete" ng-click="delete('hops', $index)"><span class="glyphicon glyphicon-trash"></span></button></td>

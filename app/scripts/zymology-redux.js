@@ -246,18 +246,21 @@ var model = {
 		{
 			name: '2 Row',
 			manufacturer: 'Breiss',
+			lovibond: 1.8,
 			ppg: 37,
-			quantity: 5
+			quantity: 8
 		}, {
 			name: 'Munich',
 			manufacturer: 'Weyermann',
-			ppg: 32,
-			quantity: 1
-		}, {
-			name: 'Maris Otter',
-			manufacturer: 'Crisp',
-			ppg: 35,
+			lovibond: 10,
+			ppg: 30,
 			quantity: 3
+		}, {
+			name: 'Cara Munich',
+			manufacturer: 'Castle',
+			lovibond: 60,
+			ppg: 29,
+			quantity: 1
 		}
 	],
 	hops: [
@@ -265,16 +268,22 @@ var model = {
 			name: 'Cascade',
 			origin: 'USA',
 			time: 60,
+			alpha_acid: 11,
+			ibu: 0,
 			quantity: 2
 		}, {
 			name: 'Citra',
 			origin: 'USA',
 			time: 30,
+			alpha_acid: 5,
+			ibu: 0,
 			quantity: 2
 		}, {
 			name: 'Galaxy',
 			origin: 'Australia',
 			time: 1,
+			alpha_acid: 13,
+			ibu: 0,
 			quantity: 3
 		}
 
@@ -285,6 +294,10 @@ var zymology = angular.module('zymology', []);
 zymology.controller('recipeCtrl', function($scope) {
 	$scope.recipe = model;
 
+	$scope.delete = function(collection, index) {
+		$scope.recipe[collection].splice(index, 1);
+	};
+	
 	$scope.totalFermentables = function() {
 		var count = 0;
 		angular.forEach($scope.recipe.fermentables, function(fermentable) {
@@ -293,16 +306,8 @@ zymology.controller('recipeCtrl', function($scope) {
 		return count;
 	};
 
-	$scope.totalHops = function() {
-		var count = 0;
-		angular.forEach($scope.recipe.hops, function(hop) {
-			count = count + parseFloat(hop.quantity);
-		});
-		return count;
-	};
-
-	$scope.delete = function(collection, index) {
-		$scope.recipe[collection].splice(index, 1);
+	$scope.fermentablePercent = function(fermentable) {
+		return (fermentable.quantity / $scope.totalFermentables() * 100).toFixed(2)
 	};
 
 	$scope.potentialPPG = function() {
@@ -321,5 +326,34 @@ zymology.controller('recipeCtrl', function($scope) {
 	$scope.fg = function() {
 		var fg = $scope.potentialPPG() * $scope.recipe.efficiency * $scope.recipe.attenuation;
 		return ($scope.potentialPPG() * $scope.recipe.efficiency - fg) * 0.001 + 1;
+	};
+
+	$scope.totalHops = function() {
+		var count = 0;
+		angular.forEach($scope.recipe.hops, function(hop) {
+			count = count + parseFloat(hop.quantity);
+		});
+		return count;
+	};
+
+	$scope.ibu = function(hop) {
+		var aau = hop.alpha_acid * hop.quantity,
+			// Hop utilization equation by Glenn Tinseth: http://www.realbeer.com/hops/research.html
+			tinseth = (1.65 * Math.pow(0.000125, ($scope.og() - 1))) * ((1 - Math.pow(Math.E, (-0.04 * hop.time))) / 4.15),
+			// 74.89 is the constant for the conversion of Imperial units to Metric. The proper units for IBUs are milligrams per liter.
+			// TODO: use milligrams per liter
+			ibu = aau * tinseth * 74.89 / $scope.recipe.batch_size;
+
+		return ibu;
+	};
+
+	$scope.totalIBU = function() {
+		var ibu = 0;
+		
+		angular.forEach($scope.recipe.hops, function(hop) {
+			ibu = ibu + $scope.ibu(hop);
+		});
+
+		return ibu;
 	};
 });
