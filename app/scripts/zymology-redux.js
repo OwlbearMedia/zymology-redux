@@ -289,6 +289,7 @@ var model = {
 
 	]
 };
+
 var zymology = angular.module('zymology', []);
 
 zymology.controller('recipeCtrl', function($scope) {
@@ -326,6 +327,20 @@ zymology.controller('recipeCtrl', function($scope) {
 	$scope.fg = function() {
 		var fg = $scope.potentialPPG() * $scope.recipe.efficiency * $scope.recipe.attenuation;
 		return ($scope.potentialPPG() * $scope.recipe.efficiency - fg) * 0.001 + 1;
+	};
+
+	$scope.srm = function() {
+		var mcu = 0;
+
+		angular.forEach($scope.recipe.fermentables, function(fermentable) {
+			mcu = mcu + (fermentable.lovibond * parseFloat(fermentable.quantity) / $scope.recipe.batch_size);
+		});
+
+		return 1.4922 * Math.pow(mcu, 0.6859);
+	};
+
+	$scope.abv = function() {
+		return ((76.08 * ($scope.og() - $scope.fg()) / (1.775 - $scope.og())) * ($scope.fg() / 0.794));
 	};
 
 	$scope.totalHops = function() {
