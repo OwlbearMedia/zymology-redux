@@ -15,93 +15,99 @@
 			<a class="navbar-brand" href="/">Zymology Redux</a>
 		</div>
 	</nav>
-	<div ng-controller="recipeCtrl">
-		<div class="container">
-			<h2>{{ recipe.name }}</h2>	
-		</div>
-		
-		<div class="container">
+	<div class="container" ng-controller="recipeCtrl">
+		<form class="form" role="form">
+			<h2><input name="name" id="name" class="form-control" type="text" ng-model="recipe.name" placeholder="Recipe Name"/></h2>	
+			
 			<div class="row">
-				<div class="col-md-12">
-					<div class="stats">
-						<div class="row">
-							<div class="col-sm-4">
-								<h3>Vital Statistics</h3>
+				<div class="col-md-9">
+					<h3>Fermentables</h3>
+					<div class="table-responsive">
+						<table class="table">
+							<tr>
+								<th class="qty">%</th>
+								<th class="qty">Qty</th>
+								<th>Name</th>
+								<th colspan="2">Manufacturer</th>
+							</tr>
+							<tr ng-repeat="fermentable in recipe.fermentables | orderBy:'-quantity'">
+								<td class="qty">{{ fermentablePercent(fermentable) }}</td>
+								<td class="qty"><input name="fermentable-quantity" type="number" min="0" step="0.25" class="form-control" ng-model="fermentable.quantity" ng-model-options="{ updateOn: 'change' }"></td>
+								<td>{{ fermentable.name }}</td>
+								<td>{{ fermentable.manufacturer }}</td>
+								<td><button type="button" class="btn btn-default delete" ng-click="delete('fermentables', $index)"><span class="glyphicon glyphicon-trash"></span></button></td>
+							</tr>
+						</table>
+					</div>
+
+					<h3>Hops</h3>
+					<div class="table-responsive">
+						<table class="table">
+							<tr>
+								<th class="qty">IBU</th>
+								<th class="qty">Time</th>
+								<th class="qty">Qty</th>
+								<th>Name</th>
+								<th colspan="2">Origin</th>
+							</tr>
+							<tr ng-repeat="hop in recipe.hops | orderBy:'-time'">
+								<td class="qty">{{ ibu(hop).toFixed(2) }}</td>
+								<td class="qty"><input name="hop-time" type="number" min="0" max="{{ recipe.boil_time }}" class="form-control" value="{{ hop.time }}" ng-model="hop.time" ng-model-options="{ updateOn: 'change' }"></td>
+								<td class="qty"><input name="hop-quantity" type="number" min="0" step="0.25" class="form-control" value="{{ hop.quantity }}" ng-model="hop.quantity" ng-model-options="{ updateOn: 'change' }"></td>
+								<td>{{ hop.name }}</td>
+								<td>{{ hop.origin }}</td>
+								<td><button type="button" class="btn btn-default delete" ng-click="delete('hops', $index)"><span class="glyphicon glyphicon-trash"></span></button></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+				<div class="col-md-3">
+						<div class="stats row">
+							<div class="col-md-12 col-sm-4">
 								<p>Brewed by: {{ recipe.brewer }}</p>
-								<p>Batch Size: {{ recipe.batch_size }} gallons</p>
-								<p>Boil Time: {{ recipe.boil_time }} minutes</p>
+								<div class="form-group">
+									<label for="batch-size">Batch Size:</label>
+									<input name="batch-size" id="batch-size" class="form-control" type="number" ng-model="recipe.batch_size"/> gallons
+								</div>
+								<div class="form-group">
+									<label for="boil-time">Boil Time:</label>
+									<input name="batch-size" id="batch-size" class="form-control" type="number" ng-model="recipe.boil_time"/> minutes
+								</div>
 							</div>
-							<div class="col-sm-4">
-								<div class="sub-group">
-									<p>Total Fermentables: {{ totalFermentables() }} pounds</p>
-									<div class="row">
-										<div class="col-xs-4">Efficiency: <input type="tel" class="form-control" ng-model="recipe.efficiency"></div>
-										<div class="col-xs-4">
-											<p>OG: {{ og().toFixed(3) }}<p>
-											<p>FG: {{ fg().toFixed(3) }}</p>
-										</div>
-										<div class="col-xs-4">
-											<p>SRM: {{ srm().toFixed(2) }}</p>
-											<p>ABV: {{ abv().toFixed(2) }}% </p>
-										</div>
+							<div class="sub-group col-md-12 col-sm-4">
+								<p>Total Fermentables: {{ totalFermentables() }} pounds</p>
+								<div class="row">
+									<div class="col-xs-4">
+										<label for="efficiency">Efficiency:</label>
+										<input name="efficiency" id="efficiency" type="number" step=".01" min="0" max="1" class="form-control" ng-model="recipe.efficiency"></div>
+									<div class="col-xs-4">
+										<p>OG: {{ og().toFixed(3) }}<p>
+										<p>FG: {{ fg().toFixed(3) }}</p>
+									</div>
+									<div class="col-xs-4">
+										<p>SRM: {{ srm().toFixed(2) }}</p>
+										<p>ABV: {{ abv().toFixed(2) }}% </p>
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-4">
-								<div class="sub-group">
-									<p>Total Hops: {{ totalHops() }} ounces</p>
-									<p>IBU: {{ totalIBU().toFixed(1) }}</p>
-								</div>
+							<div class="sub-group col-md-12 col-sm-4">
+								<p>Total Hops: {{ totalHops() }} ounces</p>
+								<p>IBU: {{ totalIBU().toFixed(1) }}</p>
 							</div>
 						</div>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="container">
-			<h3>Fermentables</h3>
-			<div class="table-responsive">
-				<table class="table">
-					<tr>
-						<th class="qty">%</th>
-						<th class="qty">Qty</th>
-						<th>Name</th>
-						<th colspan="2">Manufacturer</th>
-					</tr>
-					<tr ng-repeat="fermentable in recipe.fermentables | orderBy:'-quantity'">
-						<td class="qty">{{ fermentablePercent(fermentable) }}</td>
-						<td class="qty"><input type="tel" class="form-control" ng-model="fermentable.quantity" ng-model-options="{ updateOn: 'blur' }"></td>
-						<td>{{ fermentable.name }}</td>
-						<td>{{ fermentable.manufacturer }}</td>
-						<td><button type="button" class="btn btn-default delete" ng-click="delete('fermentables', $index)"><span class="glyphicon glyphicon-trash"></span></button></td>
-					</tr>
-				</table>
-			</div>
-		</div>
-
-		<div class="container">
-			<h3>Hops</h3>
-			<div class="table-responsive">
-				<table class="table">
-					<tr>
-						<th class="qty">IBU</th>
-						<th class="qty">Time</th>
-						<th class="qty">Qty</th>
-						<th>Name</th>
-						<th colspan="2">Origin</th>
-					</tr>
-					<tr ng-repeat="hop in recipe.hops | orderBy:'-time'">
-						<td class="qty">{{ ibu(hop).toFixed(2) }}</td>
-						<td class="qty"><input type="tel" class="form-control" value="{{ hop.time }}" ng-model="hop.time" ng-model-options="{ updateOn: 'blur' }"></td>
-						<td class="qty"><input type="tel" class="form-control" value="{{ hop.quantity }}" ng-model="hop.quantity" ng-model-options="{ updateOn: 'blur' }"></td>
-						<td>{{ hop.name }}</td>
-						<td>{{ hop.origin }}</td>
-						<td><button type="button" class="btn btn-default delete" ng-click="delete('hops', $index)"><span class="glyphicon glyphicon-trash"></span></button></td>
-					</tr>
-				</table>
-			</div>
-		</div>
+		</form>
 	</div>
 
 	<script src="//localhost:35729/livereload.js"></script>

@@ -8,9 +8,7 @@ button.delete {
 	float: right;
 }
 .stats {
-	padding: 9px 14px;
-	margin-bottom: 14px;
-	margin-top: 14px;
+	padding-top: 10px;
 	background-color: #f7f7f9;
 	border: 1px solid #e1e1e8;
 	border-radius: 4px;
@@ -19,7 +17,10 @@ button.delete {
 	margin-top: 0;
 }
 .stats .sub-group {
-	border: 1px solid #e1e1e8;
-	padding: 9px 14px;
-	border-radius: 4px;
+	border-top: 1px solid #e1e1e8;
+	padding-top: 10px;
+}
+.stats input {
+	display: inline-block;
+	width: 75px;
 }
