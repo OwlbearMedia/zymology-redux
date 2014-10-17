@@ -21,7 +21,8 @@
 			
 			<div class="row">
 				<div class="col-md-9">
-					<h3>Fermentables</h3>
+					<h3 class="pull-left">Fermentables</h3>
+					<a href="#" id="add-fermentables" class="add-btn">Add fermentables</a>
 					<div class="table-responsive">
 						<table class="table">
 							<tr>
@@ -32,7 +33,7 @@
 							</tr>
 							<tr ng-repeat="fermentable in recipe.fermentables | orderBy:'-quantity'">
 								<td class="qty">{{ fermentablePercent(fermentable) }}</td>
-								<td class="qty"><input name="fermentable-quantity" type="number" min="0" step="0.25" class="form-control" ng-model="fermentable.quantity" ng-model-options="{ updateOn: 'change' }"></td>
+								<td class="qty"><input name="fermentable-quantity" type="number" min="0" step="0.1" class="form-control" ng-model="fermentable.quantity" ng-model-options="{ updateOn: 'change' }"></td>
 								<td>{{ fermentable.name }}</td>
 								<td>{{ fermentable.manufacturer }}</td>
 								<td><button type="button" class="btn btn-default delete" ng-click="delete('fermentables', $index)"><span class="glyphicon glyphicon-trash"></span></button></td>
@@ -40,7 +41,8 @@
 						</table>
 					</div>
 
-					<h3>Hops</h3>
+					<h3 class="pull-left">Hops</h3>
+					<a href="#" id="add-hops" class="add-btn">Add hops</a>
 					<div class="table-responsive">
 						<table class="table">
 							<tr>
@@ -53,7 +55,7 @@
 							<tr ng-repeat="hop in recipe.hops | orderBy:'-time'">
 								<td class="qty">{{ ibu(hop).toFixed(2) }}</td>
 								<td class="qty"><input name="hop-time" type="number" min="0" max="{{ recipe.boil_time }}" class="form-control" value="{{ hop.time }}" ng-model="hop.time" ng-model-options="{ updateOn: 'change' }"></td>
-								<td class="qty"><input name="hop-quantity" type="number" min="0" step="0.25" class="form-control" value="{{ hop.quantity }}" ng-model="hop.quantity" ng-model-options="{ updateOn: 'change' }"></td>
+								<td class="qty"><input name="hop-quantity" type="number" min="0" step="0.1" class="form-control" value="{{ hop.quantity }}" ng-model="hop.quantity" ng-model-options="{ updateOn: 'change' }"></td>
 								<td>{{ hop.name }}</td>
 								<td>{{ hop.origin }}</td>
 								<td><button type="button" class="btn btn-default delete" ng-click="delete('hops', $index)"><span class="glyphicon glyphicon-trash"></span></button></td>
@@ -68,23 +70,39 @@
 								<p>Brewed by: {{ recipe.brewer }}</p>
 								<div class="form-group">
 									<label for="batch-size">Batch Size:</label>
-									<input name="batch-size" id="batch-size" class="form-control" type="number" ng-model="recipe.batch_size"/> gallons
+									<input name="batch-size" id="batch-size" class="form-control" type="number" ng-model="recipe.batch_size"/>
+									<span class="units"> gallons</span>
 								</div>
 								<div class="form-group">
 									<label for="boil-time">Boil Time:</label>
 									<input name="batch-size" id="batch-size" class="form-control" type="number" ng-model="recipe.boil_time"/> minutes
 								</div>
 							</div>
+
 							<div class="sub-group col-md-12 col-sm-4">
-								<p>Total Fermentables: {{ totalFermentables() }} pounds</p>
+								<p>Total Grains: {{ totalFermentables() }} pounds</p>
+								<div class="form-group">
+									<label for="og" title="">Estimated OG:</label>
+									<input name="og" id="og" class="form-control" type="number" step=".001" value="{{ og().toFixed(3) }}" readonly="readonly"/>
+								</div>
+								<div class="form-group">
+									<label for="fg" title="">Estimated FG:</label>
+									<input name="fg" id="fg" class="form-control" type="number" step=".001" value="{{ fg().toFixed(3) }}" readonly="readonly"/>
+								</div>
+								<div class="form-group">
+									<label for="efficiency">Efficiency:</label>
+									<input name="efficiency" id="efficiency" type="number" step=".01" min="0" max="1" class="form-control" ng-model="recipe.efficiency"/>
+								</div>
+								<div class="form-group">
+									<label for="og" title="">Measured OG:</label>
+									<input name="og" id="og" class="form-control" type="number" step=".001" placeholder="{{ og().toFixed(3) }}" ng-model="recipe.gravity.og"/>
+								</div>
+								<div class="form-group">
+									<label for="fg" title="">Measured FG:</label>
+									<input name="fg" id="fg" class="form-control" type="number" step=".001" placeholder="{{ fg().toFixed(3) }}" ng-model="recipe.gravity.fg"/>
+								</div>
+
 								<div class="row">
-									<div class="col-xs-4">
-										<label for="efficiency">Efficiency:</label>
-										<input name="efficiency" id="efficiency" type="number" step=".01" min="0" max="1" class="form-control" ng-model="recipe.efficiency"></div>
-									<div class="col-xs-4">
-										<p>OG: {{ og().toFixed(3) }}<p>
-										<p>FG: {{ fg().toFixed(3) }}</p>
-									</div>
 									<div class="col-xs-4">
 										<p>SRM: {{ srm().toFixed(2) }}</p>
 										<p>ABV: {{ abv().toFixed(2) }}% </p>

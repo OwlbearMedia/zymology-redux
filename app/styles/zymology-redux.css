@@ -1,8 +1,26 @@
+/* Bootstrap overrides */
+.form-group {
+	margin-bottom: 10px;
+}
+.form-control[type="number"] {
+	padding: 6px 6px 6px 12px;
+}
+
+/* Styles */
+body {
+	margin-bottom: 30px;
+}
 th {
 	text-transform: capitalize;
 }
 td.qty, th.qty {
 	width: 95px
+}
+.add-btn {
+	float: right;
+	font-size: 16px;
+	margin-bottom: 10px;
+	margin-top: 20px;
 }
 button.delete {
 	float: right;
@@ -19,6 +37,10 @@ button.delete {
 .stats .sub-group {
 	border-top: 1px solid #e1e1e8;
 	padding-top: 10px;
+}
+.stats label {
+	vertical-align: middle;
+	width: 33%;
 }
 .stats input {
 	display: inline-block;

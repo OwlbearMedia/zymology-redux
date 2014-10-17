@@ -242,6 +242,10 @@ var model = {
 	boil_time: 60,
 	efficiency: 0.75,
 	attenuation: 0.75,
+	gravity: {
+		og: null,
+		fg: null
+	},
 	fermentables: [
 		{
 			name: '2 Row',
